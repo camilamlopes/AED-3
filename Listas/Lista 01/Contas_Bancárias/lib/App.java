@@ -3,6 +3,8 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import entities.Conta;
+
 public class App {
     public static void main(String[] args) throws Exception {
         String[] email_1 = {"lopes.camilamoreira@gmail.com", "camilamoeriral2001@gmail.com", "camilaml2001@gmail.com"};
@@ -16,10 +18,10 @@ public class App {
         100, 999);       
         System.out.println(c2);
 
-        FileOutputStream fos = new FileOutputStream("./db/banco.db");
+        FileOutputStream fos = new FileOutputStream("banco.db");
         DataOutputStream dos = new DataOutputStream(fos);
 
-        FileInputStream fis = new FileInputStream("./db/banco.db");
+        FileInputStream fis = new FileInputStream("banco.db");
         DataInputStream dis = new DataInputStream(fis);
 
         Conta c3 = new Conta();
@@ -44,14 +46,14 @@ public class App {
             b = new byte[len];
             dis.read(b);
             c3.fromByteArray(b);
-            c3.idConta = 3;
+            c3.setId(3);
             System.out.println(c3);
 
             len = dis.readInt();
             b = new byte[len];
             dis.read(b);
             c4.fromByteArray(b);
-            c4.idConta = 4;
+            c4.setId(4);
             System.out.println(c4);
 
             dis.close();
