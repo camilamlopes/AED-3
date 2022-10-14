@@ -14,7 +14,7 @@ import interfaces.*;
  * @version 1.0
  */
 
-public class Conta implements Registro {
+public class Conta implements Register {
     /******** VARIÁVEIS PROTEGIDAS ********/
     // ------------- string ------------- //
     protected String nomeUsuario;           

@@ -1,10 +1,9 @@
 package database;
 import java.io.*;
 import java.lang.reflect.*;
-import interfaces.Registro;
 import entities.*;
 
-public class CRUD <T extends Registro> {
+public class CRUD <T extends Register> {
     private RandomAccessFile rac;
     private Lapides lixo;
     private Constructor<T> constructor;
@@ -66,42 +65,97 @@ public class CRUD <T extends Registro> {
     }
 
     public T read (int id) {
-        T entidade = null;
+        T entity = null;
 
         try {
             // mover o ponteiro para o primeiro registro
             rac.seek(0);
             int last_id = rac.readInt();
 
-            if(last_id == 0) {
-                // não existe
-            }
-
-            int current_id = 0;
-            long current_pos;
-            long register_size;
+            if(last_id == 0) 
+                throw new Exception("The file is empty!");
             
-            rac.seek(6);
-            while (current_id < last_id && id > current_id) {
-                
-                register_size = rac.readLong();
+            char grave;
+            int current_id = 0;
+            long current_pos = 0;
+            long register_size;
+            boolean flag = true;
+            
+            rac.seek(4);
+            do{
                 current_pos = rac.getFilePointer();
+                grave = rac.readChar();
+                register_size = rac.readLong();
                 current_id = rac.readInt();
+                if(current_id == id){
+                    flag = false;
+                }
 
-                if(current_id == id)
-                    last_id = 0;
-                else
-                    rac.seek(current_pos + register_size + 2);
-            }
+                rac.skipBytes((int) register_size - 2);
 
-            rac.seek(current_pos - 10);
+            } while (flag && (rac.getFilePointer() <= rac.length() - 1));
 
+                        
+            rac.seek(current_pos + 2);
+            long size = rac.readLong();
+            byte[] data = new byte[(int) size];
 
+            entity = this.constructor.newInstance();
+
+            if(flag == false && grave == ' ')
+                entity.fromByteArray(data);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return entity;
+    }
+    
+    public void update() {
+        try {
+            
         } catch (Exception e) {
             // TODO: handle exception
         }
     }
-    
+
+    public void delete (int id) {
+        try {
+            // mover o ponteiro para o primeiro registro
+            rac.seek(0);
+            int last_id = rac.readInt();
+
+            if(last_id == 0) 
+                throw new Exception("The file is empty!");
+            
+            char grave;
+            int current_id = 0;
+            long current_pos = 0;
+            long register_size;
+            boolean flag = true;
+            
+            rac.seek(4);
+            do{
+                current_pos = rac.getFilePointer();
+                grave = rac.readChar();
+                register_size = rac.readLong();
+                current_id = rac.readInt();
+                if(current_id == id){
+                    flag = false;
+                }
+
+                rac.skipBytes((int) register_size - 2);
+
+            } while (flag && (rac.getFilePointer() <= rac.length() - 1));
+            
+            rac.seek(current_pos);
+            if(flag == false && grave == ' ')
+                rac.writeChar('*');
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
     
 }
 

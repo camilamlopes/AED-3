@@ -2,11 +2,11 @@ package interfaces;
 import os_procesess.*;
 
 public class Menus {
-    private Contas conta;
+    private Contas account;
 
     public Menus() {
         try {
-            conta = new Contas();
+            account = new Contas();
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -23,11 +23,14 @@ public class Menus {
             System.out.println("UAIBANK 1.0");
             System.out.println("===========================================\n");
             System.out.println("Login Menu\n");
-            System.out.println("1.) Acessar conta");
-            System.out.println("2.) Criar nova conta");
+            System.out.println("1.) Access account");
+            System.out.println("2.) Update account");
+            System.out.println("3.) Create a new account");
+            System.out.println("4.) Delete account");
+            System.out.println("5.) Transfer money to another account");
             System.out.println("\n -------------------------");
-            System.out.println("\n0.) Acessar conta");
-            System.out.print("\nInsira sua opção: ");
+            System.out.println("\n0.) Exit");
+            System.out.print("\nInsert your option: ");
 
             int option = IO.readInt();
 
@@ -36,13 +39,13 @@ public class Menus {
                     flag = false;
                     break;
                 case 1:
-                    conta.read();
+                    account.read();
                     break;
                 case 2:
-                    conta.create();
+                    account.create();
                     break;
                 default:
-                    System.out.println("Opção inválida!");
+                    System.out.println("Invalid Option!");
                     break;
             }
 

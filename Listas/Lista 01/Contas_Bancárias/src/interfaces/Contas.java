@@ -88,9 +88,12 @@ public class Contas{
 
             Conta c = dados.read(id);
 
+            if(c == null || c.getId() == -1)
+                System.out.println("The account doesn't exists! We didn't find any account with this id: " + id);
             
+            //TODO: printar informações da conta
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
     }
     //update
