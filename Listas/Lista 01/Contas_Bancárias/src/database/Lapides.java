@@ -13,7 +13,6 @@ public class Lapides {
             if(rac.length() == 0) 
                 rac.writeLong(-1);
             
-
             rac.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,7 +56,7 @@ public class Lapides {
 
             rac.close();
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
     }
 
@@ -72,6 +71,8 @@ public class Lapides {
 
         try {
             rac = new RandomAccessFile(this.save_location, "rw");
+            rac.seek(8);
+
 
             while (flag && (rac.getFilePointer() <= rac.length() - 1)) {
                 candidate_size = rac.readLong();

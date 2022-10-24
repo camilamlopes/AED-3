@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import interfaces.*;
 /**
  * Entidade Conta do Usuário
  * @author Camila Moreira Lopes
@@ -82,7 +81,7 @@ public class Conta implements Register {
     } //end of full constructor
 
     /********** GETTERS E SETTERS **********/
-    private String getNomeUsuario() {
+    public String getNomeUsuario() {
         return nomeUsuario;
     }
 
@@ -90,47 +89,47 @@ public class Conta implements Register {
         this.nomeUsuario = nomeUsuario;
     }
 
-    private String getNomePessoa() {
+    public String getNomePessoa() {
         return nomePessoa;
     }
 
-    private void setNomePessoa(String nomePessoa) {
+    public void setNomePessoa(String nomePessoa) {
         this.nomePessoa = nomePessoa;
     }
 
-    private String getCidade() {
+    public String getCidade() {
         return cidade;
     }
 
-    private void setCidade(String cidade) {
+    public void setCidade(String cidade) {
         this.cidade = cidade;
     }
 
-    private String getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    private void setSenha(String senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    private List getEmail() {
+    public List<String> getEmail() {
         return email;
     }
 
-    private void setEmail(List<String> email) {
+    public void setEmail(List<String> email) {
         this.email = email;
     }
 
-    private int getQnt_email() {
+    public int getQnt_email() {
         return qnt_email;
     }
 
-    private void setQnt_email(int qnt_email) {
+    public void setQnt_email(int qnt_email) {
         this.qnt_email = qnt_email;
     }
 
-    private char[] getCpf() {
+    public char[] getCpf() {
         return cpf;
     }
 
@@ -138,11 +137,11 @@ public class Conta implements Register {
         this.cpf = cpf;
     }
 
-    private int getTransfRealizadas() {
+    public int getTransfRealizadas() {
         return transfRealizadas;
     }
 
-    private void setTransfRealizadas(int transfRealizadas) {
+    public void setTransfRealizadas(int transfRealizadas) {
         this.transfRealizadas = transfRealizadas;
     }
 
@@ -154,11 +153,11 @@ public class Conta implements Register {
         this.id = id;
     }
 
-    private float getSaldoConta() {
+    public float getSaldoConta() {
         return saldoConta;
     }
 
-    private void setSaldoConta(float saldoConta) {
+    public void setSaldoConta(float saldoConta) {
         this.saldoConta = saldoConta;
     }
 

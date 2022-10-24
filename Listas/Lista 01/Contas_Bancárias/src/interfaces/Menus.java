@@ -1,14 +1,18 @@
 package interfaces;
+
+import entities.Conta;
 import os_procesess.*;
 
 public class Menus {
     private Contas account;
+    private Conta entity_account;
 
     public Menus() {
         try {
+            entity_account = new Conta();
             account = new Contas();
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
         
     }
@@ -22,12 +26,11 @@ public class Menus {
 
             System.out.println("UAIBANK 1.0");
             System.out.println("===========================================\n");
-            System.out.println("Login Menu\n");
-            System.out.println("1.) Access account");
+            System.out.println("Menu\n");
+            System.out.println("1.) Acessar informações da conta");
             System.out.println("2.) Update account");
-            System.out.println("3.) Create a new account");
-            System.out.println("4.) Delete account");
-            System.out.println("5.) Transfer money to another account");
+            System.out.println("3.) Deletar Conta");
+            System.out.println("5.) Fazer transferência");
             System.out.println("\n -------------------------");
             System.out.println("\n0.) Exit");
             System.out.print("\nInsert your option: ");
@@ -42,7 +45,7 @@ public class Menus {
                     account.read();
                     break;
                 case 2:
-                    account.create();
+                    account.update(entity_account);
                     break;
                 default:
                     System.out.println("Invalid Option!");
@@ -55,7 +58,41 @@ public class Menus {
 
     /* Método da tela de login */
     public void login() {
-        //inserir ou nome de usuário
+        boolean flag = true;
+
+        while(flag) {
+            Console.clearConsole();
+
+            System.out.println("UAIBANK 1.0");
+            System.out.println("===========================================\n");
+            System.out.println("Menu Inicial\n");
+            System.out.println("1.) Entrar em uma conta");
+            System.out.println("2.) Criar uma conta");
+            System.out.println("\n -------------------------");
+            System.out.println("\n0.) Exit");
+            System.out.print("\nInsert your option: ");
+
+            int option = IO.readInt();
+
+            switch (option) {
+                case 0:
+                    flag = false;
+                    break;
+                case 1:
+                    entity_account = account.login_read();
+                    telaInicial();
+                    option = 0;
+                    break;
+                case 2:
+                    account.create();
+                    break;
+                default:
+                    System.out.println("Invalid Option!");
+                    break;
+            }
+
+            
+        } // end of while
 
 
     }

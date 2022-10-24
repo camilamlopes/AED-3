@@ -79,7 +79,6 @@ public class Contas{
     }
 
     //read
-
     public void read () {
         try {
             // obter id
@@ -89,13 +88,99 @@ public class Contas{
             Conta c = dados.read(id);
 
             if(c == null || c.getId() == -1)
-                System.out.println("The account doesn't exists! We didn't find any account with this id: " + id);
+                throw new Exception("A conta não existe! Não foi possível encontrar uma conta com esse id: " + id);
             
-            //TODO: printar informações da conta
+            System.out.println(c.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    // login read
+    public Conta login_read () {
+        Conta c = new Conta();
+        try {
+            // obter id
+            System.out.print("Insira seu nome de usuário: ");
+            String user = IO.readString();
+            
+            c = dados.read(user);
+
+            if(c == null || c.getId() == -1)
+                throw new Exception("A conta não existe! Não foi possível encontrar uma conta com esse id: " + user);
+            
+            
+            boolean flag = true;
+
+            while (flag) {
+                System.out.print("Insira sua senha: ");
+                String password = IO.readString();
+
+                if(password.equals(c.getSenha()))
+                    flag = false;
+                else 
+                    System.out.println("Senha incorreta!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return c;
+    }
+
     //update
+    public void update (Conta c) {
+        try {   
+            // update do nome?
+            if(Console.ask("Gostaria de modificar seu nome?")){
+                System.out.print("Insira seu nome completo: ");
+                c.setNomePessoa(IO.readString());
+            }
+    
+            // cadastro da cidade
+            if(Console.ask("Gostaria de modificar a cidade em que mora?")){
+                System.out.print("\n Insira o nome da cidade que mora: ");
+                c.setCidade(IO.readString());
+            }
+            
+            // entrada do(s) email(s)
+            if(Console.ask("Gostaria de modificar seus e-mails?")){
+                List<String> emails = new ArrayList<String>();
+                System.out.println("Insira todos os seus emails relacionados a erra conta!");
+                
+                do {
+                    System.out.print("Insira seu email: ");
+                    emails.add(IO.readString());
+                } while(Console.ask("Gostaria de inserir mais um email?"));
+
+                c.setEmail(emails);
+            }
+    
+            // cadastro de senha
+            if(Console.ask("Gostaria de modificar sua senha?")){
+                System.out.print("Insira sua senha: ");
+                c.setSenha(IO.readString());
+            }
+            
+            
+            dados.update(c);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     //delete
+    public void delete (){
+        try {
+            // obter id
+            System.out.print("Insira o ID que gostaria de deletar: ");
+            int id = IO.readInt();
+
+            dados.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
