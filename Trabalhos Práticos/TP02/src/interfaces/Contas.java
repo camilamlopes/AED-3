@@ -5,6 +5,8 @@ import java.util.*;
 import java.io.File;
 import database.CRUD;
 import database.Huffman.*;
+import database.LZW.LZWDecoder;
+import database.LZW.LZWEncoder;
 import os_procesess.*;
 
 public class Contas{
@@ -243,6 +245,7 @@ public class Contas{
         try {
             long bflib = dados.rac.length() * 8;
             String bfToString = dados.toString();
+
             // tempo inicial
             double start, end;
 
@@ -266,7 +269,31 @@ public class Contas{
             System.out.println("\t- Tamanho final em bits: " + flib);
             System.out.println("\t- Taxa de Compressão: " + tc);
             System.out.println("\t- Fator de Compressão: " + fc);
-            System.out.println("\t- Perccentual de Redução: " + (100 * (1 - tc)));
+            System.out.println("\t- Percentual de Redução: " + (100 * (1 - tc)));
+
+            System.out.println("\n\n");
+
+
+            // using LZW
+            
+            System.out.println("\nComprimindo o arquivo de dados com LZW...");
+            
+            start = new Date().getTime();
+            int lzwEncoderLength = LZWEncoder.encode(bfToString, "Contas");
+            end = new Date().getTime();
+
+            System.out.println("\nCompressão sucedida!");
+            System.out.println("Tamanho do arquivo original: " + bflib);
+
+            tc = (float) lzwEncoderLength / bflib;
+            fc = (float) bflib / lzwEncoderLength;
+            
+            System.out.println("\nLZW");
+            System.out.println("\t- Tempo de execução: " + (end - start) + " segundos");
+            System.out.println("\t- Tamanho final em bits: " + lzwEncoderLength);
+            System.out.println("\t- Taxa de Compressão: " + tc);
+            System.out.println("\t- Fator de Compressão: " + fc);
+            System.out.println("\t- Percentual de Redução: " + (100 * (1 - tc)));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,7 +312,7 @@ public class Contas{
             double version = IO.readDouble();
 
             File arq = new File(("./db/Huffman/Contas" + version  + ".db"));
-            long bflib = arq.length();
+            long bflib = arq.length() * 8;
 
             // tempo inicial
             double start, end;
@@ -312,6 +339,30 @@ public class Contas{
             System.out.println("\t- Fator de Compressão: " + fc);
             System.out.println("\t- Perccentual de Redução: " + (100 * (1 - tc)));
 
+            // using LZW
+
+            arq = new File(("./db/LZW/Contas" + version  + ".db"));
+            bflib = arq.length() * 8;
+
+            System.out.println("\nDescomprimindo o arquivo de dados com LZW...");
+            
+            start = new Date().getTime();
+            decoded = LZWDecoder.decode("Contas", (long) version);            
+            end = new Date().getTime();
+
+            System.out.println("\nDescompressão sucedida!");
+            System.out.println("Tamanho do arquivo codificado: " + bflib);
+
+            flib = decoded.length();
+            tc = (float) flib / bflib;
+            fc = (float) bflib / flib;
+            
+            System.out.println("\nLZW");
+            System.out.println("\t- Tempo de execução: " + (end - start) + " segundos");
+            System.out.println("\t- Tamanho do arquivo descompactado: " + flib);
+            System.out.println("\t- Taxa de Compressão: " + tc);
+            System.out.println("\t- Fator de Compressão: " + fc);
+            System.out.println("\t- Perccentual de Redução: " + (100 * (1 - tc)));
         } catch (Exception e) {
             e.printStackTrace();
         }
