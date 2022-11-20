@@ -295,7 +295,7 @@ public class Contas{
             
             start = new Date().getTime();
             Huffman h = new Huffman();
-            String decoded = h.decode("Contas", (long)version);            
+            String decoded = h.decode("Contas", (long)version, bflib);            
             end = new Date().getTime();
 
             System.out.println("\nDescompressão sucedida!");
