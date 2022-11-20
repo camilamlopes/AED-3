@@ -10,27 +10,29 @@ import java.io.*;
 import java.util.*;
 
 public class Huffman {
-    private HashMap<Character, String> index;
+    private HashMap<Character, String> hmapCode;
+    private HashMap<String, Character> hmapCodeR;
 
     public Huffman() {
-        index = new HashMap<Character, String>();
+        hmapCode = new HashMap<Character, String>();
+        hmapCodeR = new HashMap<String, Character>();
     } 
 
-    public void buildFileCodeIndex(String toDecode, String name , long lastVersion) {
+    public void buildFileCodehmapCode(String toDecode, String name , long lastVersion) {
         // definir a frequencia de cada caractere
         int[] charFrequency = new int[256];
         for(char c :toDecode.toCharArray())
             charFrequency[c]++;
             
         HuffmanTree hT = Huffman.buildTree(charFrequency);
-        buildCodeIndex(hT, "");
+        buildCodehmapCode(hT, "");
 
         //
         try {
-            RandomAccessFile arq = new RandomAccessFile(("./db/Huffman/" + name + "Index" + lastVersion  + ".huff"), "rw");
+            RandomAccessFile arq = new RandomAccessFile(("./db/Huffman/" + name + "hmapCode" + lastVersion  + ".huff"), "rw");
             String value;
-            for(char ch : index.keySet()) {
-                value = index.get(ch);
+            for(char ch : hmapCode.keySet()) {
+                value = hmapCode.get(ch);
                 
                 arq.writeUTF(value);
                 arq.writeChar(ch);
@@ -42,25 +44,24 @@ public class Huffman {
         }
     }
 
-    private void buildCodeIndex (HuffmanTree n, String code) {
+    private void buildCodehmapCode (HuffmanTree n, String code) {
         if (n != null) {
             if(!(n instanceof HuffmanLeaf)) {
                 HuffmanNode node = (HuffmanNode) n;
                 
-                buildCodeIndex(node.left, code + '0');
-                buildCodeIndex(node.right, code + '1');
+                buildCodehmapCode(node.left, code + '0');
+                buildCodehmapCode(node.right, code + '1');
             } 
             else {
                 HuffmanLeaf leaf = (HuffmanLeaf) n;
-                index.put(leaf.value, code);
+                hmapCode.put(leaf.value, code);
             }
         }
     }
 
-    private void readCodeIndex (String name, long version) {
-
+    private void readCodehmapCode (String name, long version) {
         try {
-            RandomAccessFile arq = new RandomAccessFile(("./db/Huffman/" + name + "Index" + version  + ".huff"), "rw");
+            RandomAccessFile arq = new RandomAccessFile(("./db/Huffman/" + name + "hmapCode" + version  + ".huff"), "rw");
             String value;
             char ch;
 
@@ -68,7 +69,7 @@ public class Huffman {
                 try{
                     value = arq.readUTF();
                     ch = arq.readChar();
-                    index.put(ch, value);
+                    hmapCodeR.put(value, ch);
                 } catch(EOFException e){
                    break;
                 }
@@ -130,13 +131,13 @@ public class Huffman {
         BitWriter bitWriter = new BitWriter(arq);
 
         StringBuilder sb = new StringBuilder();       
-        buildFileCodeIndex(encode, name, lastVersion);
+        buildFileCodehmapCode(encode, name, lastVersion);
 
         byte[] bytesCode;
         String str;
 
         for(char ch : encode.toCharArray()) {
-            str = index.get(ch);
+            str = hmapCode.get(ch);
             sb.append(str);
 
             assert str != null;
@@ -159,19 +160,28 @@ public class Huffman {
      * @param f file to decode
      * @return decoded file
      */
-    public String decode(String name, long version) {
+    public String decode(String name, long version, long encodedBitsLenght) {
 
         File directory = new File("./db/Huffman/");
         long lastVersion = directory.list().length + 1;
         File arq = new File(("./db/Huffman/" + name + lastVersion  + ".db"));
 
-        readCodeIndex(name, version);
+        readCodehmapCode(name, version);
 
         StringBuilder decodeText = new StringBuilder();
+        
         try {
             byte[] bitsToDecode = new BitReader(arq).getBits();
-            
+            String t = "";
 
+            for(int i = 0; i < encodedBitsLenght; i++){
+                t += (bitsToDecode[i] == 0x00 ? '0' : '1');
+
+                if (hmapCodeR.containsKey(t)) {
+                    decodeText.append(hmapCodeR.get(t));
+                    t = "";
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
